@@ -14,7 +14,7 @@ git clone https://github.com/anishathalye/neural-style
 
 2. Create a styles repo (or clone it from this repo)
 ```
-mkdir styles
+$nmkdir styles
 # add your styles
 ```
 or
@@ -23,7 +23,7 @@ or
 3. Upload your styles repo (optional)
 The name flag is optional.  Since I have multiple style directories uploaded to Spell, I'll use the name flag to specify that this is my itp_styles directory.
 ```
-spell upload styles [--name itp_styles]
+$ spell upload styles [--name itp_styles]
 ```
 
 You can view your uploaded resources on Spell using `spell ls uploads`
@@ -37,7 +37,7 @@ This isn't strictly necessary, but for some reason the code won't run for me unl
 The below code will put your file into a directory named vgg.
 
 ```
-spell upload ~/Downloads/imagenet-vgg-verydeep-19.mat --name vgg
+$ spell upload ~/Downloads/imagenet-vgg-verydeep-19.mat --name vgg
 ```
 
 To view the file use `spell ls uploads/vgg`
@@ -46,9 +46,9 @@ To view the file use `spell ls uploads/vgg`
 Create another folder for your content images, add your images, and upload to Spell.
 
 ```
-mkdir content_images
+$ mkdir content_images
 # add images to your directory
-spell upload content_images
+$ spell upload content_images
 ```
 
 7. Go into your neural-style dir and run some style transfers!
@@ -61,9 +61,9 @@ The flags you'll need for your Spell command include:
 - the command: you can see all the different available flags for your command by using `spell run "python neural_style.py --help"` or by checking [here](https://github.com/a-tbd/itp-workshop/neural_style_parameters.md).  In this command, I'm just using the default parameters.
 
 ```
-cd neural-style
+$ cd neural-style
 
-spell run -t K80 -m uploads/itp_styles:styles -m uploads/content_images:images -m uploads/vgg:vgg \
+$ spell run -t K80 -m uploads/itp_styles:styles -m uploads/content_images:images -m uploads/vgg:vgg \
 "python neural_style.py \
 --network vgg/imagenet-vgg-verydeep-19.mat \
 --content images/my_image.jpg \
@@ -79,7 +79,7 @@ spell run -t K80 -m uploads/itp_styles:styles -m uploads/content_images:images -
 Next, I'll download my results to a new folder called outputs.  Here, you'll want to replace `<run id>` with your run id, which you can find either at the beginning or end of your run logs, or by checking `spell ps`
 
 ```
-spell cp runs/<run id> [../outputs]
+$ spell cp runs/<run id> [../outputs]
 ```
 
 9. Now trying playing around with parameters!
@@ -92,16 +92,16 @@ Next we'll take a look at pix2pix, which is a popular repo for artists.
 
 1. clone pix2pix
 ```
-git clone https://github.com/affinelayer/pix2pix-tensorflow.git
-cd pix2pix-tensorflow
+$ git clone https://github.com/affinelayer/pix2pix-tensorflow.git
+$ cd pix2pix-tensorflow
 ```
 
 2. find a video
-for this example, we'll going to train a neural net to generate the next frame of a video.  Here I'm using a short video of a cloud, which you can find online in this repo.
+for this example, we'll going to train a neural net to generate the next frame of a video.  Here I'm using a short video of a cloud, which you can download from my google drive [here](https://drive.google.com/drive/folders/1nmKfQb24ICd9cm9lslre6kHPQqy3KB3H?usp=sharing).
 ```
-mkdir video_input 
-# Add a video to your new directory, if you cloned this repo already, there is a video there called fast_clouds.mp4 which you can use
-spell upload video_input
+$ mkdir video_input 
+# Add a video to your new directory
+$ spell upload video_input
 ```
 
 3. get frames from the video
@@ -113,40 +113,44 @@ This code snippet will output a series of numbered pngs which are each frame of 
 - `ffmpeg -i video/face.mp4 -r 1/1 $filename%04d.png` : this command is looping through all the frames in our video `fast_clouds.mp4` and then saving that frame with the name 0001.png, 0002.png etc.  The `%4d` indicates that we want to give our numbers 4 digit places.  If you have a lot of frames you may need to change this to `$05d`.
 
 ```
-spell run -m uploads/video_input:video --apt ffmpeg "ffmpeg -i video/fast_clouds.mp4 -r 1/1 $filename%04d.png"
+$ spell run -m uploads/video_input:video --apt ffmpeg "ffmpeg -i video/fast_clouds.mp4 -r 1/1 $filename%04d.png"
 💫 Casting spell #123…
 ```
 
 4. Next we'll download our frames
 You'll need to replace `<run id>` with the id from the previous run. You can find this at the beginning or end of your run logs, or using `spell ps`
 ```
-spell cp runs/<run id> fast_clouds_frames
+$ spell cp runs/<run id> fast_clouds_frames
 ```
 
 5. Rename your files to pair them
 In order to train our neural net using pix2pix, we'll need to create paired images.  To do this, we need two directories with images that have identical names so the pix2pix script can create pairs.  Since we want to pair each frame of one directory with the next frame, we'll create a second directory and rename the files so they are shifted by one.
 
 ```
-cp -r fast_clouds_frames fast_clouds_frames_2 # create a second directory that is a copy of all the frames in your original directory
-a=0; for i in *.png; do new=$(printf "%04d.png" "$a"); mv -i -- "$i" "$new"; let a=a+1; done # rename them shifted by one
+# create a second directory that is a copy of all the frames in your original directory
+$ cp -r fast_clouds_frames fast_clouds_frames_2 
+
+# rename them shifted by one
+$ a=0; for i in *.png; do new=$(printf "%04d.png" "$a"); mv -i -- "$i" "$new"; let a=a+1; done 
 ```
 You'll need to remove 0000.png from the new dir, and the last file from your old dir to make sure the numbers of the files all match up.
 
 6. Upload your images
 ```
-mkdir paired_images
-mv fast_clouds_frames paired_images
-mv fast_clouds_frames_2 paired_images
-spell upload paired_images
+$ mkdir paired_images
+$ mv fast_clouds_frames paired_images
+$ mv fast_clouds_frames_2 paired_images
+$ spell upload paired_images
 ```
 
 7. resize the images
 The pix2pix repo comes with a script for resizing your images.  Remember the run ids for each of these processes.
 ```
-spell run -m uploads/paired_images:images -t K80 "python tools/process.py --input_dir images/face_frames_out --operation resize --output_dir resized"
+$ spell run -m uploads/paired_images:images -t K80 "python tools/process.py --input_dir images/face_frames_out --operation resize --output_dir resized"
 💫 Casting spell #100…
+
 # Repeat the resizing process for your other directory
-spell run -m uploads/paired_images:images -t K80 "python tools/process.py --input_dir images/face_frames_out_2 --operation resize --output_dir resized"
+$ spell run -m uploads/paired_images:images -t K80 "python tools/process.py --input_dir images/face_frames_out_2 --operation resize --output_dir resized"
 💫 Casting spell #101…
 ```
 8. combine your images
@@ -155,7 +159,7 @@ Pix2pix needs your images to be in pairs, and it comes with a script for creatin
 - `-m runs/101:b` : mount your resized images from your second run
 - `-t K80` : you can probably do this on CPU since it's not a process that needs a GPU.  I have the `-t` flag here just in case you want it, but if you want to run on a CPU just remove this flag altogether.
 ```
-spell run -m runs/100:a -m runs/101:b -t K80 "python tools/process.py --input_dir a/resized --b_dir b/resized --operation combine --output_dir combined"
+$ spell run -m runs/100:a -m runs/101:b -t K80 "python tools/process.py --input_dir a/resized --b_dir b/resized --operation combine --output_dir combined"
 💫 Casting spell #102…
 ```
 
@@ -165,7 +169,7 @@ Now you're ready to train your neural net on your paired images.  You'll need to
 - `-m runs/102:images_train` : You'll need to mount your directory of paired images from the previous run.  If you forgot the run id, you can check it using `spell ps`
 - `--python2` : although pix2pix should work with python 3, it wasn't working for me during testing.  Using the `--python2` flag to change the environment to python 2 did the trick.
 ```
-`spell run -t K80 -m runs/102:images_train --python2 "python pix2pix.py --mode train --output_dir face_train --max_epochs 200 --input_dir images_train/combined --which_direction BtoA"
+$ spell run -t K80 -m runs/102:images_train --python2 "python pix2pix.py --mode train --output_dir face_train --max_epochs 200 --input_dir images_train/combined --which_direction BtoA"
 💫 Casting spell #103…
 ```
 
@@ -176,13 +180,13 @@ This step can also be used to generate new images.  Here, I'm mounting the same 
 - `-m runs/103/clouds_train:clouds_train` : here, we're mounting our trained neural net which was created during the training step.  if you don't remember the run id from that step, you can find it using `spell ps`  
 
 ```
-spell run -t K80 -m runs/102/combined:images --python2 -m runs/103/clouds_train:clouds_train "python pix2pix.py --mode test --output_dir clouds_test --input_dir images --checkpoint clouds_train"
+$ spell run -t K80 -m runs/102/combined:images --python2 -m runs/103/clouds_train:clouds_train "python pix2pix.py --mode test --output_dir clouds_test --input_dir images --checkpoint clouds_train"
 💫 Casting spell #104…
 ```
 
 Finally, we'll download the output of our test step to see our new, generated images:
 ```
-spell cp runs/104 ../output_clouds
+$ spell cp runs/104 ../output_clouds
 ```
 
 Try playing around with different pairs of images, changing the `--max_epochs` flag, or the `--which_direction` flag to create new iamges and artworks.
