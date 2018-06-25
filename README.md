@@ -198,4 +198,5 @@ Try playing around with different pairs of images, changing the `--max_epochs` f
 3. https://github.com/lengstrom/fast-style-transfer
 
 There's a tutorial for using fast style transfer with Spell [here](https://spell.run/docs/transferring_style/)
+
 4. Gene Kogan's [machine learning for artists](https://ml4a.github.io/guides/) website and [slack channel](https://ml-4a.slack.com/join/shared_invite/enQtMjcxMjUwNDQ0NDAzLWVmMTFmMTc3ZDJlYTExNGE1ZmQ4NTk1NGJhZWI3ODJmYWI2ZjgxYmQ3NWMzOWU3NTE3ZDYxOTBkMDg5Nzg5M2I)
