@@ -54,7 +54,7 @@ $ spell upload content_images
 7. Go into your neural-style dir and run some style transfers!
 
 The flags you'll need for your Spell command include:
-- `-t K80/V100` : this indicates what type of GPU you're using.  The K80 is slower and cheaper ($1/hr) and the V100 is faster but more expensive ($4/hr).  The style transfer should only take a few minutes to complete.  If you want to run on CPU, just leave out the -t flag.
+- `-t K80/V100` : this indicates what type of GPU you're using.  The K80 is slower and cheaper ($1/hr) and the V100 is faster but more expensive ($4/hr).  The style transfer should only take a few minutes to complete.  This code doesn't work on CPU so you'll need to select one of the GPU options.
 - `-m uploads/itp_styles:styles` : you'll need to "mount" your directories so your command can "see" them.  Think of everything that's inside the quotes as your command.  This command is running in a fresh environment, and it isn't able to see the directories you've uploaded to Spell unless you mount them first.  When mounting, you can give your mounted directory a new name if that's easier to remember.  Everything ahead of the colon is your directory as it exists on Spell, everything after the colon is your new name for that directory.  In this case I'm mounting my `uploads/itp_styles` directory and calling it `styles` for this command.
 - `-m uploads/content_images:images` : here I'm mounting my content images and calling the directory `images` for this command.
 - `-m uploads/vgg:vgg` : lastly, I'm mounting the pre-trained model we downloaded.
@@ -157,15 +157,14 @@ $ spell run -m uploads/paired_images:images -t K80 "python tools/process.py --in
 Pix2pix needs your images to be in pairs, and it comes with a script for creating the paired images. You'll need the run ids from your resizing image step for this.
 - `-m runs/100:a` : mount your resized images from your first run
 - `-m runs/101:b` : mount your resized images from your second run
-- `-t K80` : you can probably do this on CPU since it's not a process that needs a GPU.  I have the `-t` flag here just in case you want it, but if you want to run on a CPU just remove this flag altogether.
 ```
-$ spell run -m runs/100:a -m runs/101:b -t K80 "python tools/process.py --input_dir a/resized --b_dir b/resized --operation combine --output_dir combined"
+$ spell run -m runs/100:a -m runs/101:b "python tools/process.py --input_dir a/resized --b_dir b/resized --operation combine --output_dir combined"
 💫 Casting spell #102…
 ```
 
 9. train!
 Now you're ready to train your neural net on your paired images.  You'll need to:
-- `-t K80` : you'll want a GPU for the training step.  You could run it on a CPU but it would take a long time, esp if you have a lot of images. 
+- `-t K80` : you'll want a GPU for the training step.  You can select either the `K80` or the `V100`.  This code doesn't work on CPU :(
 - `-m runs/102:images_train` : You'll need to mount your directory of paired images from the previous run.  If you forgot the run id, you can check it using `spell ps`
 - `--python2` : although pix2pix should work with python 3, it wasn't working for me during testing.  Using the `--python2` flag to change the environment to python 2 did the trick.
 ```
@@ -175,12 +174,12 @@ $ spell run -t K80 -m runs/102:images_train --python2 "python pix2pix.py --mode 
 
 10. Test!
 This step can also be used to generate new images.  Here, I'm mounting the same directory we used for training in order to test, but you could use a new image, or new directory of images.
-- `-t K80` : you'll want a GPU for this step too, though it's possible to do it on a CPU if you don't mind waiting
+- `-t K80` : you can run this step on a CPU (which I've done below by leaving out the `-t` flag).  You can also specify a GPU if you'd like.
 - `-m runs/102/combined:images` : we're mounting the same directory we created in step 8 and mounted in step 9.
 - `-m runs/103/clouds_train:clouds_train` : here, we're mounting our trained neural net which was created during the training step.  if you don't remember the run id from that step, you can find it using `spell ps`  
 
 ```
-$ spell run -t K80 -m runs/102/combined:images --python2 -m runs/103/clouds_train:clouds_train "python pix2pix.py --mode test --output_dir clouds_test --input_dir images --checkpoint clouds_train"
+$ spell run -m runs/102/combined:images --python2 -m runs/103/clouds_train:clouds_train "python pix2pix.py --mode test --output_dir clouds_test --input_dir images --checkpoint clouds_train"
 💫 Casting spell #104…
 ```
 
