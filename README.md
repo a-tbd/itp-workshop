@@ -180,6 +180,7 @@ Now you're ready to train your neural net on your paired images.  You'll need to
 - `-t K80` : you'll want a GPU for the training step.  You can select either the `K80` or the `V100`.  This code doesn't work on CPU :(
 - `-m runs/102:images_train` : You'll need to mount your directory of paired images from the previous run.  If you forgot the run id, you can check it using `spell ps`
 - `--python2` : although pix2pix should work with python 3, it wasn't working for me during testing.  Using the `--python2` flag to change the environment to python 2 did the trick.
+
 ```
 $ spell run -t K80 -m runs/102:images_train --python2 "python pix2pix.py --mode train --output_dir face_train --max_epochs 200 --input_dir images_train/combined --which_direction BtoA"
 💫 Casting spell #103…
@@ -188,6 +189,7 @@ $ spell run -t K80 -m runs/102:images_train --python2 "python pix2pix.py --mode 
 10. Test!
 
 This step can also be used to generate new images.  Here, I'm mounting the same directory we used for training in order to test, but you could use a new image, or new directory of images.
+
 - `-t K80` : you can run this step on a CPU (which I've done below by leaving out the `-t` flag).  You can also specify a GPU if you'd like.
 - `-m runs/102/combined:images` : we're mounting the same directory we created in step 8 and mounted in step 9.
 - `-m runs/103/clouds_train:clouds_train` : here, we're mounting our trained neural net which was created during the training step.  if you don't remember the run id from that step, you can find it using `spell ps`  
@@ -201,6 +203,10 @@ Finally, we'll download the output of our test step to see our new, generated im
 ```
 $ spell cp runs/104 ../output_clouds
 ```
+
+In this example, we generated the next frame based on one frame.  In order to create a "dream" video like the [Mario Klingemann fireworks](https://www.fastcodesign.com/90156087/an-ai-learned-to-make-fireworks-and-theyre-mesmerizing) example, you'll need to use one of your generated frames as a test frame and keep looping it.
+
+To do this, instead of running *all* your images through the `--test` script, just run one image.  Then take that output and use that as your next input image.  And keep repeating.  
 
 Try playing around with different pairs of images, changing the `--max_epochs` flag, or the `--which_direction` flag to create new iamges and artworks.
 
