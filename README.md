@@ -163,7 +163,9 @@ $ spell run -m uploads/paired_images:images -t K80 "python tools/process.py --in
 $ spell run -m uploads/paired_images:images -t K80 "python tools/process.py --input_dir images/face_frames_out_2 --operation resize --output_dir resized"
 💫 Casting spell #101…
 ```
+
 8. combine your images
+
 Pix2pix needs your images to be in pairs, and it comes with a script for creating the paired images. You'll need the run ids from your resizing image step for this.
 - `-m runs/100:a` : mount your resized images from your first run
 - `-m runs/101:b` : mount your resized images from your second run
