@@ -204,9 +204,9 @@ Finally, we'll download the output of our test step to see our new, generated im
 $ spell cp runs/104 ../output_clouds
 ```
 
-In this example, we generated the next frame based on one frame.  In order to create a "dream" video like the [Mario Klingemann fireworks](https://www.fastcodesign.com/90156087/an-ai-learned-to-make-fireworks-and-theyre-mesmerizing) example, you'll need to use one of your generated frames as a test frame and keep looping it.
+In this example, we generated the next frame based on one frame.  In order to create a "dream" video like the [Mario Klingemann fireworks](https://www.fastcodesign.com/90156087/an-ai-learned-to-make-fireworks-and-theyre-mesmerizing) example, you'll need to use one of your generated frames as the input image when you run the `--test` step and keep doing that to generate more frames.
 
-To do this, instead of running *all* your images through the `--test` script, just run one image.  Then take that output and use that as your next input image.  And keep repeating.  
+In other words, instead of running *all* your images through the `--test` script, just run one image.  Then take that output and use that as your next input image.  And keep repeating.  
 
 Try playing around with different pairs of images, changing the `--max_epochs` flag, or the `--which_direction` flag to create new iamges and artworks.
 
