@@ -21,6 +21,7 @@ or
 `git clone https://github.com/a-tbd/itp-workshop.git`
 
 3. Upload your styles repo (optional)
+
 The name flag is optional.  Since I have multiple style directories uploaded to Spell, I'll use the name flag to specify that this is my itp_styles directory.
 ```
 $ spell upload styles [--name itp_styles]
@@ -29,6 +30,7 @@ $ spell upload styles [--name itp_styles]
 You can view your uploaded resources on Spell using `spell ls uploads`
 
 4. Download pretrained model
+
 this url will begin the download: http://www.vlfeat.org/matconvnet/models/beta16/imagenet-vgg-verydeep-19.mat
 
 5. Upload the model to Spell
@@ -43,6 +45,7 @@ $ spell upload ~/Downloads/imagenet-vgg-verydeep-19.mat --name vgg
 To view the file use `spell ls uploads/vgg`
 
 6. Select and upload content images
+
 Create another folder for your content images, add your images, and upload to Spell.
 
 ```
@@ -91,6 +94,7 @@ Try changing the default parameters such as `--content-weight` or `--style-layer
 Next we'll take a look at pix2pix, which is a popular repo for artists.
 
 1. clone pix2pix
+
 ```
 $ git clone https://github.com/affinelayer/pix2pix-tensorflow.git
 $ cd pix2pix-tensorflow
@@ -105,6 +109,7 @@ $ spell upload video_input
 ```
 
 3. get frames from the video
+
 In order to train our neural net, we'll need to get the frames from the video, and pair each frame with the frame that comes after.  Then we can train the neural net to generate the next frame of the video, based on a frame we're inputting.
 
 This code snippet will output a series of numbered pngs which are each frame of the video.
@@ -118,24 +123,28 @@ $ spell run -m uploads/video_input:video --apt ffmpeg "ffmpeg -i video/fast_clou
 ```
 
 4. Next we'll download our frames
+
 You'll need to replace `<run id>` with the id from the previous run. You can find this at the beginning or end of your run logs, or using `spell ps`
 ```
 $ spell cp runs/<run id> fast_clouds_frames
 ```
 
 5. Rename your files to pair them
+
 In order to train our neural net using pix2pix, we'll need to create paired images.  To do this, we need two directories with images that have identical names so the pix2pix script can create pairs.  Since we want to pair each frame of one directory with the next frame, we'll create a second directory and rename the files so they are shifted by one.
 
 ```
 # create a second directory that is a copy of all the frames in your original directory
 $ cp -r fast_clouds_frames fast_clouds_frames_2 
 
-# rename them shifted by one
+# rename them shifted by one.  This needs to be run from within the directory that contains your images
+$ cd fast_clouds_frames_2
 $ a=0; for i in *.png; do new=$(printf "%04d.png" "$a"); mv -i -- "$i" "$new"; let a=a+1; done 
 ```
 You'll need to remove 0000.png from the new dir, and the last file from your old dir to make sure the numbers of the files all match up.
 
 6. Upload your images
+
 ```
 $ mkdir paired_images
 $ mv fast_clouds_frames paired_images
@@ -144,6 +153,7 @@ $ spell upload paired_images
 ```
 
 7. resize the images
+
 The pix2pix repo comes with a script for resizing your images.  Remember the run ids for each of these processes.
 ```
 $ spell run -m uploads/paired_images:images -t K80 "python tools/process.py --input_dir images/face_frames_out --operation resize --output_dir resized"
@@ -163,6 +173,7 @@ $ spell run -m runs/100:a -m runs/101:b "python tools/process.py --input_dir a/r
 ```
 
 9. train!
+
 Now you're ready to train your neural net on your paired images.  You'll need to:
 - `-t K80` : you'll want a GPU for the training step.  You can select either the `K80` or the `V100`.  This code doesn't work on CPU :(
 - `-m runs/102:images_train` : You'll need to mount your directory of paired images from the previous run.  If you forgot the run id, you can check it using `spell ps`
@@ -173,6 +184,7 @@ $ spell run -t K80 -m runs/102:images_train --python2 "python pix2pix.py --mode 
 ```
 
 10. Test!
+
 This step can also be used to generate new images.  Here, I'm mounting the same directory we used for training in order to test, but you could use a new image, or new directory of images.
 - `-t K80` : you can run this step on a CPU (which I've done below by leaving out the `-t` flag).  You can also specify a GPU if you'd like.
 - `-m runs/102/combined:images` : we're mounting the same directory we created in step 8 and mounted in step 9.
