@@ -91,11 +91,11 @@ Try changing the default parameters such as `--content-weight` or `--style-layer
 
 Examples:
 
-![Starry night and tiled moon style transfer](https://github.com/a-tbd/ITP-workshop/imgs/neural_style/starry_moons_default.jpg "Starry Night + Many Moons Default parameters")
+![Starry night and tiled moon style transfer](https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural_style/starry_moons_default.jpg "Starry Night + Many Moons Default parameters")
 
-![Starry night and tiled moon style transfer](https://github.com/a-tbd/ITP-workshop/imgs/neural_style/starry_moons_point4.jpg "Starry Night + Many Moons --style-layer-weight-exp .4")
+![Starry night and tiled moon style transfer](https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural_style/starry_moons_point4.jpg "Starry Night + Many Moons --style-layer-weight-exp .4")
 
-![Starry night and tiled moon style transfer](https://github.com/a-tbd/ITP-workshop/imgs/neural_style/starry_moons_point2.jpg "Starry Night + Many Moons --style-layer-weight-exp .2")
+![Starry night and tiled moon style transfer](https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural_style/starry_moons_point2.jpg "Starry Night + Many Moons --style-layer-weight-exp .2")
 
 ## Training a neural net with [pix2pix](https://github.com/affinelayer/pix2pix-tensorflow.git)
 
@@ -217,6 +217,12 @@ In this example, we generated the next frame based on one frame.  In order to cr
 In other words, instead of running *all* your images through the `--test` script, just run one image.  Then take that output and use that as your next input image.  And keep repeating.  
 
 Try playing around with different pairs of images, changing the `--max_epochs` flag, or the `--which_direction` flag to create new iamges and artworks.
+
+![Input image, frame from cloud video](https://github.com/a-tbd/itp-workshop/blob/master/imgs/pix2pix/0001-inputs.png "Input image")
+
+![Output image, generated next frame of cloud video](https://github.com/a-tbd/itp-workshop/blob/master/imgs/pix2pix/0001-outputs.png "Output image")
+
+![Target image, actual next frame of cloud video](https://github.com/a-tbd/itp-workshop/blob/master/imgs/pix2pix/0001-targets.png "Target image")
 
 ## Other repos/resources to look at
 
