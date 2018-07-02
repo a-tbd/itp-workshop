@@ -91,7 +91,7 @@ Try changing the default parameters such as `--content-weight` or `--style-layer
 
 Examples:
 
-![Starry night and tiled moon style transfer](https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural_style/starry_moons_default.jpg =500x "Starry Night + Many Moons Default parameters")
+<img src="https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural_style/starry_moons_default.jpg" alt="Starry night and tiled moon style transfer" width="500px"/>
 
 ![Starry night and tiled moon style transfer](https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural_style/starry_moons_point4.jpg "Starry Night + Many Moons --style-layer-weight-exp .4")
 
