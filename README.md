@@ -91,11 +91,18 @@ Try changing the default parameters such as `--content-weight` or `--style-layer
 
 Examples:
 
+Starry night with [tiled moons](https://github.com/a-tbd/itp-workshop/blob/master/styles/many_moons_smaller.jpg) as the style and the default parameters
+
 <img src="https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural_style/starry_moons_default.jpg" alt="Starry night and tiled moon style transfer" width="500px"/>
 
-![Starry night and tiled moon style transfer](https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural_style/starry_moons_point4.jpg "Starry Night + Many Moons --style-layer-weight-exp .4")
+Starry night with [tiled moons](https://github.com/a-tbd/itp-workshop/blob/master/styles/many_moons_smaller.jpg) as the style and `--style-layer-weight-exp` set to .4
 
-![Starry night and tiled moon style transfer](https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural_style/starry_moons_point2.jpg "Starry Night + Many Moons --style-layer-weight-exp .2")
+<img src="https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural_style/starry_moons_point4.jpg" alt="Starry Night + Many Moons --style-layer-weight-exp .4" width="500px"/>
+
+Starry night with [tiled moons](https://github.com/a-tbd/itp-workshop/blob/master/styles/many_moons_smaller.jpg) as the style and `--style-layer-weight-exp` set to .2
+
+<img src="https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural_style/starry_moons_point2.jpg" alt="Starry Night + Many Moons --style-layer-weight-exp .2" width="500px"/>
+
 
 ## Training a neural net with [pix2pix](https://github.com/affinelayer/pix2pix-tensorflow.git)
 
