@@ -89,6 +89,14 @@ $ spell cp runs/<run id> [../outputs]
 
 Try changing the default parameters such as `--content-weight` or `--style-layer-weight-exp` to see how this changes your results.
 
+Examples:
+
+![Starry night and tiled moon style transfer](https://github.com/a-tbd/ITP-workshop/imgs/neural_style/starry_moons_default.jpg "Starry Night + Many Moons Default parameters")
+
+![Starry night and tiled moon style transfer](https://github.com/a-tbd/ITP-workshop/imgs/neural_style/starry_moons_point4.jpg "Starry Night + Many Moons --style-layer-weight-exp .4")
+
+![Starry night and tiled moon style transfer](https://github.com/a-tbd/ITP-workshop/imgs/neural_style/starry_moons_point2.jpg "Starry Night + Many Moons --style-layer-weight-exp .2")
+
 ## Training a neural net with [pix2pix](https://github.com/affinelayer/pix2pix-tensorflow.git)
 
 Next we'll take a look at pix2pix, which is a popular repo for artists.
