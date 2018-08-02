@@ -14,7 +14,7 @@ git clone https://github.com/anishathalye/neural-style
 
 2. Create a styles repo (or clone it from this repo)
 ```
-$nmkdir styles
+$ mkdir styles
 # add your styles
 ```
 or
