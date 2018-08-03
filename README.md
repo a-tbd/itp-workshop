@@ -34,7 +34,7 @@ You can view your uploaded resources on Spell using `spell ls uploads`
 this url will begin the download: http://www.vlfeat.org/matconvnet/models/beta16/imagenet-vgg-verydeep-19.mat
 
 5. Upload the model to Spell
-This isn't strictly necessary, but for some reason the code won't run for me unless I upload it.  This model is also used by other repos so it's handy to have it available online anyway.
+Large files like this (>1GB) must be uploaded to Spell to be used in a run.  This model is also used by other repos so it's handy to have it available online anyway.
 
 The below code will put your file into a directory named vgg.
 
