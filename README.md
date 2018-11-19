@@ -142,7 +142,7 @@ $ spell run --machine-type V100 --apt libprotobuf-dev --apt protobuf-compiler --
 
 And I get this:
 
-<img src="https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural" alt="Output image, frame from cloud video" width="300px"/>
+<img src="https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural-style-torch/brad_pitt_starry_scream.png" alt="Output image, style transfer from starry night and the scream styles transferred onto a picture of brad pitt" width="300px"/>
 
 ## Training a neural net with [pix2pix](https://github.com/affinelayer/pix2pix-tensorflow.git)
 
