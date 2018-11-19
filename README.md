@@ -123,7 +123,7 @@ $ git add models/ && git commit -m "add pretrained model"
 $ git add examples/ && git commit -m "add images"
 ```
 
-4. Train your neural net
+4. Train your neural net (here I'm using two style images, starry_night.jpg and the_scream.jpg and my content image that I'll apply the styles to is brad_pitt.jpg). More info on the parameters you can add to this repo is in it's [README.md](https://github.com/jcjohnson/neural-style)
 ```
 $ spell run -t V100 --framework torch --apt libprotobuf-dev --apt protobuf-compiler "luarocks install loadcaffe && luarocks install cutorch && th neural_style.lua -style_image examples/inputs/starry_night.jpg,examples/inputs/the_scream.jpg -content_image brad_pitt.jpg" 
 ```
