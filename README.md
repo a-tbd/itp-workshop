@@ -123,9 +123,9 @@ $ git add models/ && git commit -m "add pretrained model"
 $ git add examples/ && git commit -m "add images"
 ```
 
-4. Train your neural net (here I'm using two style images, starry_night.jpg and the_scream.jpg and my content image that I'll apply the styles to is brad_pitt.jpg). More info on the parameters you can add to this repo is in it's [README.md](https://github.com/jcjohnson/neural-style)
+4. Train your neural net (here I'm using two style images, starry_night.jpg and the_scream.jpg and my content image that I'll apply the styles to is brad_pitt.jpg). More info on the parameters you can add to this repo is in it's [README.md](https://github.com/jcjohnson/neural-style). I also specificied the normalized version of the vgg model since the regular one didn't work for me (see the [issue here](https://github.com/jcjohnson/neural-style/issues/49))
 ```
-$ spell run -t V100 --framework torch --apt libprotobuf-dev --apt protobuf-compiler "luarocks install loadcaffe && luarocks install cutorch && th neural_style.lua -style_image examples/inputs/starry_night.jpg,examples/inputs/the_scream.jpg -content_image brad_pitt.jpg" 
+$ spell run -t V100 --framework torch --apt libprotobuf-dev --apt protobuf-compiler "luarocks install loadcaffe && luarocks install cutorch && th neural_style.lua -style_image examples/inputs/starry_night.jpg,examples/inputs/the_scream.jpg -content_image brad_pitt.jpg -model_file models/vgg_normalised.caffemodel -proto_file models/VGG_ILSVRC_19_layers_deploy.prototxt" 
 ```
 
 ## Training a neural net with [pix2pix](https://github.com/affinelayer/pix2pix-tensorflow.git)
