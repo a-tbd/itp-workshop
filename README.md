@@ -112,10 +112,20 @@ Starry night with [tiled moons](https://github.com/a-tbd/itp-workshop/blob/maste
 $ git clone https://github.com/jcjohnson/neural-style
 ```
 
-2. Download the VGG-19 pretrained model (this step is from the neural style repo README.md) and make sure it's in the models folder. Commit to git.
+2. Download the VGG-19 pretrained model (this step is from the neural style repo README.md). You could download to your local computer but I used spell since I have a mac and wget doesn't work for me locally (I know I could download another tool but I was lazy :P) 
 ```
-$ sh models/download_models.sh
-$ git add models/ && git commit -m "add pretrained model"
+$ spell run models/download_models.sh
+Nov 19 10:10:01: running: 2018-11-19 15:10:01 (19.2 MB/s) - ‘VGG_ILSVRC_19_layers.caffemodel’ saved [574671192/574671192]
+✨ Run is saving
+Nov 19 10:10:06: saving: Retrieving modified or new files from the run
+Nov 19 10:10:16: saving: Saving 'models/VGG_ILSVRC_19_layers.caffemodel'
+Nov 19 10:10:51: saving: Saving 'models/VGG_ILSVRC_19_layers_deploy.prototxt'
+Nov 19 10:10:51: saving: Saving 'models/vgg_normalised.caffemodel'
+Nov 19 10:10:56: saving: Compressing saved files
+✨ Run is pushing
+Nov 19 10:12:10: pushing: Saving build environment for future runs
+✨ Total run time: 3m19.006043s
+✨ Run 2693 complete
 ```
 
 3. Add your images to the "examples/inputs" folder and commit to git
@@ -124,9 +134,15 @@ $ git add examples/ && git commit -m "add images"
 ```
 
 4. Train your neural net (here I'm using two style images, starry_night.jpg and the_scream.jpg and my content image that I'll apply the styles to is brad_pitt.jpg). More info on the parameters you can add to this repo is in it's [README.md](https://github.com/jcjohnson/neural-style). I also specificied the normalized version of the vgg model since the regular one didn't work for me (see the [issue here](https://github.com/jcjohnson/neural-style/issues/49))
+
+Since I'm using spell, I also had to mount the model files that I downloaded in step 2 into my new training run. I mounted them from my output path (runs/2693) into a folder called "models" which will be put into the root folder of my new run. This means I'll need to specify the model as "models/models/<model_name>". This is a quirk of spell :P
 ```
-$ spell run -t V100 --framework torch --apt libprotobuf-dev --apt protobuf-compiler "luarocks install loadcaffe && luarocks install cutorch && th neural_style.lua -style_image examples/inputs/starry_night.jpg,examples/inputs/the_scream.jpg -content_image brad_pitt.jpg -model_file models/vgg_normalised.caffemodel -proto_file models/VGG_ILSVRC_19_layers_deploy.prototxt" 
+$ spell run --machine-type V100 --apt libprotobuf-dev --apt protobuf-compiler --mount runs/2693:models --framework torch "luarocks install loadcaffe && luarocks install cutorch && th neural_style.lua -style_image examples/inputs/starry_night.jpg,examples/inputs/the_scream.jpg -content_image examples/inputs/brad_pitt.jpg -model_file models/models/VGG_ILSVRC_19_layers.caffemodel -proto_file models/models/VGG_ILSVRC_19_layers_deploy.prototxt"
 ```
+
+And I get this:
+
+<img src="https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural" alt="Output image, frame from cloud video" width="300px"/>
 
 ## Training a neural net with [pix2pix](https://github.com/affinelayer/pix2pix-tensorflow.git)
 
