@@ -5,11 +5,11 @@ To get Spell go to [spell.run](spell.run) and sign up for an account.
 Then install using `pip install spell`
 Next, login to your account using `spell login` and the login details from the sign up step.
 
-## Transferring Style with [Neural Style](https://github.com/anishathalye/neural-style)
+## Transferring Style with [Neural Style (tensorflow)](https://github.com/anishathalye/neural-style)
 
 1. Clone the neural style repo
 ```
-git clone https://github.com/anishathalye/neural-style
+$ git clone https://github.com/anishathalye/neural-style
 ```
 
 2. Create a styles repo (or clone it from this repo)
@@ -103,6 +103,30 @@ Starry night with [tiled moons](https://github.com/a-tbd/itp-workshop/blob/maste
 
 <img src="https://github.com/a-tbd/itp-workshop/blob/master/imgs/neural_style/starry_moons_point2.jpg" alt="Starry Night + Many Moons --style-layer-weight-exp .2" width="500px"/>
 
+
+## Transferring Style with [Neural Style (torch)](https://github.com/jcjohnson/neural-style)
+
+1. clone the neural style repo
+
+```
+$ git clone https://github.com/jcjohnson/neural-style
+```
+
+2. Download the VGG-19 pretrained model (this step is from the neural style repo README.md) and make sure it's in the models folder. Commit to git.
+```
+$ sh models/download_models.sh
+$ git add models/ && git commit -m "add pretrained model"
+```
+
+3. Add your images to the "examples/inputs" folder and commit to git
+```
+$ git add examples/ && git commit -m "add images"
+```
+
+4. Train your neural net
+```
+$ spell run -t V100 --framework torch --apt libprotobuf-dev --apt protobuf-compiler "luarocks install loadcaffe && luarocks install cutorch && th neural_style.lua -style_image examples/inputs/starry_night.jpg,examples/inputs/the_scream.jpg -content_image brad_pitt.jpg" 
+```
 
 ## Training a neural net with [pix2pix](https://github.com/affinelayer/pix2pix-tensorflow.git)
 
